@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Image, ImageBackground, StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Image, ImageBackground, StyleSheet, ScrollView } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { styles } from "./profileStyles";
 import { AntDesign } from "@expo/vector-icons"; // Importar el icono de lápiz
@@ -10,7 +10,9 @@ const ProfileScreen = () => {
   const [fullName, setFullName] = useState("Diana Zambrano");
   const [email, setEmail] = useState("dani@gmail.com");
   const [address, setAddress] = useState("San Juan de Calderón");
-  const [password, setPassword] = useState("*****");
+  const [password, setPassword] = useState(""); // Deja vacío por defecto
+  const [phone, setPhone] = useState("0991234567");
+  const [idNumber, setIdNumber] = useState("0102030405");
   const [isEditing, setIsEditing] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [profileImage, setProfileImage] = useState("https://randomuser.me/api/portraits/women/2.jpg");
@@ -70,7 +72,12 @@ const ProfileScreen = () => {
           ) : null}
         </View>
 
-        <View style={styles.form}>
+        {/* Cambia este View por ScrollView */}
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={styles.form}
+          showsVerticalScrollIndicator={false}
+        >
           <Text style={styles.label}>Nombre completo</Text>
           <TextInput
             style={styles.input}
@@ -88,6 +95,24 @@ const ProfileScreen = () => {
             keyboardType="email-address"
           />
 
+          <Text style={styles.label}>Teléfono</Text>
+          <TextInput
+            style={styles.input}
+            value={phone}
+            onChangeText={setPhone}
+            editable={isEditing}
+            keyboardType="phone-pad"
+          />
+
+          <Text style={styles.label}>Número de identificación</Text>
+          <TextInput
+            style={styles.input}
+            value={idNumber}
+            onChangeText={setIdNumber}
+            editable={isEditing}
+            keyboardType="numeric"
+          />
+
           <Text style={styles.label}>Dirección</Text>
           <TextInput
             style={styles.input}
@@ -96,20 +121,19 @@ const ProfileScreen = () => {
             editable={isEditing}
           />
 
-          <Text style={styles.label}>Contraseña</Text>
-          <TextInput
-            style={styles.input}
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry={!showPassword}
-            editable={isEditing}
-          />
           {isEditing && (
-            <TouchableOpacity onPress={togglePasswordVisibility}>
-              <Text style={styles.buttonText}>
-                {showPassword ? "Ocultar Contraseña" : "Mostrar Contraseña"}
-              </Text>
-            </TouchableOpacity>
+            <>
+              <Text style={styles.label}>Nueva contraseña</Text>
+              <TextInput
+                style={styles.input}
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                editable={isEditing}
+                placeholder="Nueva contraseña"
+                placeholderTextColor="#fff" // <-- Esto hace el placeholder blanco
+              />
+            </>
           )}
 
           {isEditing && (
@@ -117,7 +141,7 @@ const ProfileScreen = () => {
               <Text style={styles.buttonText}>Guardar</Text>
             </TouchableOpacity>
           )}
-        </View>
+        </ScrollView>
       </View>
       <CustomSidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
     </ImageBackground>

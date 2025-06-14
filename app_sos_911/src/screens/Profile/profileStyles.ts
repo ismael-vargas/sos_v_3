@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
   },  
   container: {
     flex: 1,
-    paddingTop: normalize(20),
+    paddingTop: normalize(10), // Menos espacio arriba para subir el formulario
   },
   header: {
     backgroundColor: "#6B7F7D",
@@ -62,8 +62,10 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   form: {
-    marginTop: 30,
+    marginTop: 0,
+    paddingTop: 30,
     paddingHorizontal: 25,
+    paddingBottom: 35, // Menos espacio abajo
   },
   label: {
     fontSize: 16,
@@ -90,12 +92,13 @@ export const styles = StyleSheet.create({
     backgroundColor: "#137C6B",
     paddingVertical: 14,
     borderRadius: 10,
-    marginTop: 25,
+    marginTop: 30,
     alignItems: "center",
-    shadowColor: "#000", 
+    shadowColor: "#000",
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 4,
+    marginBottom: 30, // Menos espacio abajo del botón
   },
   buttonText: {
     color: "#fff",

@@ -17,11 +17,12 @@ export const RegisterStyles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1, // Permite que el contenido se expanda si es necesario.
     paddingHorizontal: 20, // Espaciado lateral de 20 píxeles.
+    paddingBottom: 40, // Más espacio al final para que no quede pegado
   },
   
   // Contenedor del encabezado (título y subtítulo).
   headerContainer: {
-    paddingTop: Platform.OS === 'ios' ? 40 : 20, // Mayor margen superior en iOS para evitar la muesca.
+    paddingTop: Platform.OS === 'ios' ? 20 : 10, // Menos espacio arriba
     paddingBottom: 20, // Espaciado inferior.
     alignItems: 'center', // Centra el contenido horizontalmente.
   },
@@ -131,7 +132,8 @@ export const RegisterStyles = StyleSheet.create({
     flexDirection: 'row', // Organiza los elementos en fila.
     justifyContent: 'center', // Centra los elementos horizontalmente.
     alignItems: 'center', // Alinea los elementos verticalmente.
-    marginTop: 16, // Espaciado superior.
+    marginTop: 24, // Más espacio arriba del enlace
+    marginBottom: 10, // Espacio abajo para evitar que quede pegado al borde
   },
   
   // Texto informativo sobre la opción de iniciar sesión.

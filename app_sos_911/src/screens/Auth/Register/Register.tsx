@@ -28,6 +28,8 @@ export default function RegisterScreen() {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
+    phone: '',        // <-- Añadido
+    idNumber: '',     // <-- Añadido
     address: '',
     password: '',
     confirmPassword: '',
@@ -97,6 +99,32 @@ export default function RegisterScreen() {
                   autoCorrect={false}
                   value={formData.email}
                   onChangeText={(text) => setFormData({ ...formData, email: text })}
+                  returnKeyType="next"
+                />
+              </View>
+
+              {/* Campo de entrada para el teléfono */}
+              <View style={RegisterStyles.inputGroup}>
+                <Text style={RegisterStyles.label}>Teléfono</Text>
+                <TextInput
+                  style={RegisterStyles.input}
+                  placeholder="Tu número de teléfono"
+                  placeholderTextColor="#999"
+                  value={formData.phone}
+                  onChangeText={(text) => setFormData({ ...formData, phone: text })}
+                  returnKeyType="next"
+                />
+              </View>
+
+              {/* Campo de entrada para el número de identificación */}
+              <View style={RegisterStyles.inputGroup}>
+                <Text style={RegisterStyles.label}>Número de identificación</Text>
+                <TextInput
+                  style={RegisterStyles.input}
+                  placeholder="Tu número de ID"
+                  placeholderTextColor="#999"
+                  value={formData.idNumber}
+                  onChangeText={(text) => setFormData({ ...formData, idNumber: text })}
                   returnKeyType="next"
                 />
               </View>

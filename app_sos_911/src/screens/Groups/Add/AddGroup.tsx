@@ -47,17 +47,17 @@ const AddGroup: React.FC<AddGroupProps> = ({ onCreateGroup, onCancel }) => {
     { 
       id: '1', 
       name: 'Juan Pérez', 
-      image: require('../../../assets/erick.jpg')
+      image: require('../../../assets/ismael.jpg')
     },
     { 
       id: '2', 
       name: 'María García', 
-      image: require('../../../assets/erick.jpg')
+      image: require('../../../assets/chica.jpg')
     },
     { 
       id: '3', 
       name: 'Carlos López', 
-      image: require('../../../assets/erick.jpg')
+      image: require('../../../assets/isa.jpg')
     }
   ];
 

@@ -17,16 +17,13 @@ export default StyleSheet.create({
   },
   groupItem: {
     flexDirection: 'row',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: '#fff', // Fondo blanco
     borderRadius: 12,
     padding: 15,
     marginBottom: 10,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 3,
@@ -61,6 +58,11 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 4,
+  },
+  groupDescription: {
+    fontSize: 13,
+    color: '#888',
+    marginBottom: 2,
   },
   groupMembers: {
     fontSize: 14,
@@ -101,5 +103,29 @@ export default StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  editIcon: {
+    marginLeft: 10,
+    marginRight: 0,
+    padding: 4,
+    borderRadius: 12,
+    backgroundColor: 'transparent',
+  },
+  statusDot: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: '#FFB400',
+    marginLeft: 10,
+  },
+  groupNameInput: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#00ACAC',
+    borderBottomWidth: 1,
+    borderColor: '#00ACAC',
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    paddingHorizontal: 4,
+    marginBottom: 4,
   },
 });

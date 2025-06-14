@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     },
 
     // 📌 Colores según estado
-    status_resuelto: { backgroundColor: '#5CB85C', color: '#FFF' }, // Verde
+    status_resuelto: { backgroundColor: '#008080', color: '#FFF' }, // Verde-azul oscuro
     status_activo: { backgroundColor: '#D9534F', color: '#FFF' }, // Rojo
 
     alertText: {

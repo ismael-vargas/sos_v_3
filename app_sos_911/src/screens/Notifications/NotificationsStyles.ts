@@ -106,7 +106,7 @@ export const styles = StyleSheet.create({
 
   // Botón para ver la dirección del usuario
   deleteButton: {
-    backgroundColor: '#00ACAC', // Color verde
+    backgroundColor: '#008080', // Color verde esmeralda más oscuro
     padding: normalize(10),
     borderRadius: normalize(5),
     alignItems: 'center',

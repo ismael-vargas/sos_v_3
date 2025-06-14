@@ -44,7 +44,7 @@ export const LoginStyles = StyleSheet.create({
   // Estilo para la palabra "Sos" dentro del título
   sosText: {
     fontWeight: 'bold', // Negrita para destacar
-    color: '#333', // Color oscuro para contraste
+     color: '#fff', // Color oscuro para contraste
   },
 
   // Estilo para "911" dentro del título
@@ -54,10 +54,10 @@ export const LoginStyles = StyleSheet.create({
   },
 
   // Estilo del subtítulo que indica que el usuario debe iniciar sesión
-  subtitle: {
+ subtitle: {
     fontSize: 16, // Tamaño de fuente moderado
     fontWeight: '400', // Peso de fuente normal
-    color: '#220', // Gris oscuro para mejor legibilidad
+    color: '#fff', // Cambiado a blanco para mejor visibilidad
     marginBottom: 30, // Espaciado inferior
     textAlign: 'center', // Centra el texto en la pantalla
   },
@@ -115,7 +115,7 @@ export const LoginStyles = StyleSheet.create({
 
   // Enlace para registrarse
   registerLink: {
-    color: '#007B9E', // Azul para indicar que es un enlace
+    color: '#66F0E6',// Azul para indicar que es un enlace
     fontSize: 14, // Tamaño de fuente similar al texto anterior
     fontWeight: '600', // Negrita para resaltarlo
     marginLeft: 5, // Espaciado izquierdo para separarlo del texto anterior

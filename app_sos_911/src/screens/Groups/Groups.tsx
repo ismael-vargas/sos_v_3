@@ -8,9 +8,10 @@ import {
   SafeAreaView,
   ImageBackground,
   ImageSourcePropType,
-  StyleSheet
+  StyleSheet,
+  TextInput
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import Header from '../../components/Header/Header';
 import CustomSidebar from '../../components/Sidebar/Sidebar';
 import AddGroup from './Add/AddGroup';
@@ -36,8 +37,8 @@ export const GroupsScreen: React.FC<GroupsScreenProps> = ({ navigation }) => {
   const [groups, setGroups] = useState<Group[]>([
     {
       id: '1',
-      name: 'Familia',
-      description: 'Grupo familiar para compartir momentos especiales',
+      name: 'Carapungo',
+      description: 'Unidos para siempre',
       members: [
         { id: '1', name: 'Juan Pérez', image: require('../../assets/erick.jpg') },
         { id: '2', name: 'María García', image: require('../../assets/erick.jpg') },
@@ -46,8 +47,8 @@ export const GroupsScreen: React.FC<GroupsScreenProps> = ({ navigation }) => {
     },
     {
       id: '2',
-      name: 'Amigos del Trabajo',
-      description: 'Grupo para coordinar actividades con compañeros',
+      name: 'Iñaquito',
+      description: 'Reporte del barrio',
       members: [
         { id: '2', name: 'María García', image: require('../../assets/erick.jpg') },
         { id: '3', name: 'Carlos López', image: require('../../assets/erick.jpg') }
@@ -56,17 +57,27 @@ export const GroupsScreen: React.FC<GroupsScreenProps> = ({ navigation }) => {
   ]);
   const [isCreating, setIsCreating] = useState(false);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [editingGroupId, setEditingGroupId] = useState<string | null>(null);
+  const [editedGroupName, setEditedGroupName] = useState('');
 
   const handleCreateGroup = (newGroup: Group) => {
     setGroups([...groups, newGroup]);
     setIsCreating(false);
   };
 
+  const handleDeleteGroup = (groupId: string) => {
+    setGroups(groups.filter(g => g.id !== groupId));
+  };
+
   const renderGroup = ({ item }: { item: Group }) => (
-    <TouchableOpacity 
+    <TouchableOpacity
       style={styles.groupItem}
-      activeOpacity={0.7}
-      onPress={() => navigation.navigate('GroupChat', { group: item })}
+      activeOpacity={0.8}
+      onPress={() => {
+        if (editingGroupId !== item.id) {
+          navigation.navigate('GroupChat', { group: item });
+        }
+      }}
     >
       <View style={styles.groupImageContainer}>
         {item.image ? (
@@ -84,11 +95,47 @@ export const GroupsScreen: React.FC<GroupsScreenProps> = ({ navigation }) => {
         )}
       </View>
       <View style={styles.groupInfo}>
-        <Text style={styles.groupName}>{item.name}</Text>
+        {editingGroupId === item.id ? (
+          <TextInput
+            style={styles.groupNameInput}
+            value={editedGroupName}
+            onChangeText={setEditedGroupName}
+            onBlur={() => {
+              setGroups(groups.map(g => g.id === item.id ? { ...g, name: editedGroupName } : g));
+              setEditingGroupId(null);
+            }}
+            autoFocus
+          />
+        ) : (
+          <Text style={styles.groupName}>{item.name}</Text>
+        )}
+        {/* Descripción del grupo */}
+        <Text style={styles.groupDescription} numberOfLines={2}>
+          {item.description}
+        </Text>
         <Text style={styles.groupMembers}>
           {item.members.length} {item.members.length === 1 ? 'miembro' : 'miembros'}
         </Text>
       </View>
+      <TouchableOpacity
+        style={styles.editIcon}
+        onPress={(e) => {
+          e.stopPropagation();
+          setEditingGroupId(item.id);
+          setEditedGroupName(item.name);
+        }}
+      >
+        <Ionicons name="pencil" size={22} color="#00ACAC" />
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.editIcon}
+        onPress={(e) => {
+          e.stopPropagation();
+          handleDeleteGroup(item.id);
+        }}
+      >
+        <MaterialIcons name="delete" size={22} color="#FF4D4F" />
+      </TouchableOpacity>
     </TouchableOpacity>
   );
 

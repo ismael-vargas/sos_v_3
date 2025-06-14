@@ -64,7 +64,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         activeOpacity={0.8}
       >
         <LinearGradient
-          colors={['#17FF1FF1', '#00AD09C7']}
+          colors={['#009688', '#009688']} // Verde azulado suave, combina bien con blanco
           style={styles.resolveGradient}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
@@ -188,8 +188,8 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
               cx={centerX}
               cy={centerY}
               r={maxRadius * scale}
-              stroke="rgba(255, 255, 255, 0.15)"
-              strokeWidth="1"
+              stroke="#FFFFFF" // Blanco puro
+              strokeWidth="1.5" // Un poco más grueso para más visibilidad
               fill="none"
               strokeDasharray={`${normalize(5)},${normalize(15)}`}
             />
@@ -205,7 +205,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
               const radius = maxRadius * person.distance;
               const x = centerX + radius * Math.cos(angleInRadians);
               const y = centerY + radius * Math.sin(angleInRadians);
-              const opacity = Math.max(0.3, 1 - person.distance / 2);
+              const opacity = 1; // Máxima visibilidad
 
               return (
                 <G key={`connection-${person.id}`}>
@@ -214,8 +214,8 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
                     y1={centerY}
                     x2={x}
                     y2={y}
-                    stroke="#FFFFFFFF"
-                    strokeWidth="2"
+                    stroke="#FFFFFF"
+                    strokeWidth="2.5"
                     opacity={opacity}
                   />
 
@@ -227,9 +227,9 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
                         key={`dot-${person.id}-${idx}`}
                         cx={circleX}
                         cy={circleY}
-                        r="3"
-                        fill="#FFFFFFFF"
-                        opacity={opacity * 0.8}
+                        r="3.5"
+                        fill="#FFFFFF"
+                        opacity={opacity}
                       />
                     );
                   })}
@@ -237,10 +237,10 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
                   <Circle
                     cx={x}
                     cy={y}
-                    r="6"
+                    r="7"
                     fill="none"
-                    stroke="#FFFFFFFF"
-                    strokeWidth="2"
+                    stroke="#FFFFFF"
+                    strokeWidth="2.5"
                     opacity={opacity}
                   />
                 </G>
@@ -253,7 +253,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           cx={centerX}
           cy={centerY}
           r={normalize(20)}
-          fill="rgba(255, 214, 0, 0.2)"
+          fill="rgba(255,255,255,0.35)" // Más blanco en el centro
         />
       </Svg>
     );

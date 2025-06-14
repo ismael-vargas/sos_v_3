@@ -175,7 +175,7 @@ export const styles = StyleSheet.create({
   emergencyTag: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.80)',
+    backgroundColor: '#FFFFFF', // Blanco puro
     padding: normalize(10),
     borderRadius: normalize(30),
     marginTop: normalize(20),
