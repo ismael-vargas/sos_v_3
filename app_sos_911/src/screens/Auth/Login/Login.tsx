@@ -1,5 +1,5 @@
-// Importaciones necesarias desde React y React Native
-import React, { useState } from 'react';
+// Login.tsx
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,79 +8,104 @@ import {
   SafeAreaView,
   ImageBackground,
   Image,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 import { LoginScreenNavigationProp } from '../../../navigation/Navigator';
 import { LoginStyles } from './LoginStyles';
-import { Alert } from 'react-native'; // Agrega esta importación
 
-// Componente funcional para la pantalla de inicio de sesión
+axios.defaults.withCredentials = true;
+
 export default function LoginScreen() {
-  // Hook de navegación para manejar cambios de pantalla
   const navigation = useNavigation<LoginScreenNavigationProp>();
-
-  // Estados locales para almacenar el email y la contraseña
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [csrfToken, setCsrfToken] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Función de sanitización de entradas para prevenir inyecciones de código
-  const sanitizeInput = (input: string): string => {
-    // Elimina caracteres especiales que pueden ser peligrosos (ej. <, >, ", ', ;)
-    return input.replace(/[<>"/';]/g, ''); // Aquí podrías agregar más caracteres si es necesario
-  };
+  // Obtener el token CSRF
+  useEffect(() => {
+    const fetchCsrfToken = async () => {
+      try {
+        const response = await axios.get('http://192.168.1.31:9000/csrf-token');
+        setCsrfToken(response.data.csrfToken);
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          console.error('Error CSRF:', error.response?.data || error.message);
+          Alert.alert('Error', 'No se pudo obtener el token de seguridad');
+        } else if (error instanceof Error) {
+          console.error('Error:', error.message);
+          Alert.alert('Error', 'Error inesperado');
+        }
+      }
+    };
 
-  // Manejo del inicio de sesión, que incluye la sanitización de las entradas
-  const handleLogin = () => {
-    // Sanitizamos los valores de email y contraseña antes de usarlos
-    const sanitizedEmail = sanitizeInput(email);
-    const sanitizedPassword = sanitizeInput(password);
+    fetchCsrfToken();
+  }, []);
 
-    // Validación simple: asegurarse de que el email y la contraseña no estén vacíos
-    if (sanitizedEmail && sanitizedPassword) {
-      // Si todo está bien, podemos proceder con el inicio de sesión
-      console.log('Email:', sanitizedEmail, 'Password:', sanitizedPassword);
-      
-      // Aquí iría la lógica para autenticar al usuario (en este caso con datos "quemados")
-      // Si el email y contraseña son correctos, navegamos a la pantalla 'Home'
+  // Manejar el inicio de sesión
+const handleLogin = async () => {
+  if (!email || !password) {
+    Alert.alert('Error', 'Por favor ingrese email y contraseña');
+    return;
+  }
+
+  setIsLoading(true);
+  
+  try {
+    const response = await axios.post(
+      'http://192.168.1.31:9000/login-clientes',
+      {
+        correo_electronico: email,
+        contrasena_hash: password,
+      },
+      {
+        headers: {
+          'X-CSRF-Token': csrfToken,
+        },
+      }
+    );
+
+    if (response.data.success) {
+      // Guardar datos de usuario en tu estado/contexto/async storage
+      Alert.alert('Éxito', 'Inicio de sesión exitoso');
       navigation.navigate('Home');
     } else {
-      // Mostrar un mensaje de error si las entradas son inválidas
-      Alert.alert('Alerta', 'Por favor ingresa un correo y una contraseña válidos.');
+      Alert.alert('Error', response.data.message);
     }
-  };
-
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      Alert.alert('Error', error.response?.data?.message || 'Error al iniciar sesión');
+    } else {
+      Alert.alert('Error', 'Error desconocido');
+    }
+  } finally {
+    setIsLoading(false);
+  }
+};
   return (
-    // Imagen de fondo de la pantalla de inicio de sesión
     <ImageBackground
-      source={require('../../../assets/fondo1.jpg')} // Ruta de la imagen de fondo
+      source={require('../../../assets/fondo1.jpg')}
       style={LoginStyles.backgroundImage}
       resizeMode="cover"
     >
-      {/* Contenedor principal seguro para manejar los bordes de la pantalla */}
       <SafeAreaView style={LoginStyles.container}>
-
-        {/* Contenedor del logo y título */}
         <View style={LoginStyles.logoContainer}>
-          {/* Imagen del logotipo de la aplicación */}
           <Image
-            source={require('../../../assets/logo/icon.png')} // Ruta del icono de la aplicación
+            source={require('../../../assets/logo/icon.png')}
             style={LoginStyles.logo}
             resizeMode="contain"
           />
-
-          {/* Título de la aplicación */}
           <Text style={LoginStyles.title}>
             <Text style={LoginStyles.sosText}>Sos</Text>
             <Text style={LoginStyles.nineElevenText}>911</Text>
           </Text>
-
-          {/* Subtítulo debajo del título */}
           <Text style={LoginStyles.subtitle}>Inicia sesión para continuar</Text>
         </View>
 
-        {/* Contenedor de los campos de entrada */}
         <View style={LoginStyles.inputContainer}>
-          {/* Campo de entrada para el correo electrónico */}
           <TextInput
             placeholder="Correo electrónico"
             value={email}
@@ -90,7 +115,6 @@ export default function LoginScreen() {
             keyboardType="email-address"
           />
 
-          {/* Campo de entrada para la contraseña */}
           <TextInput
             placeholder="Contraseña"
             value={password}
@@ -100,24 +124,25 @@ export default function LoginScreen() {
             autoCapitalize="none"
           />
 
-          {/* Botón para iniciar sesión */}
           <TouchableOpacity
-            onPress={handleLogin} // Llamada a la función de inicio de sesión con sanitización
+            onPress={handleLogin}
             style={LoginStyles.loginButton}
+            disabled={isLoading}
           >
-            <Text style={LoginStyles.loginButtonText}>Iniciar Sesión</Text>
+            {isLoading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={LoginStyles.loginButtonText}>Iniciar Sesión</Text>
+            )}
           </TouchableOpacity>
 
-          {/* Contenedor para el mensaje de registro */}
           <View style={LoginStyles.registerContainer}>
             <Text style={LoginStyles.registerText}>¿No tienes una cuenta?</Text>
-            {/* Botón para navegar a la pantalla de registro */}
             <TouchableOpacity onPress={() => navigation.navigate('Register')}>
               <Text style={LoginStyles.registerLink}>Regístrate</Text>
             </TouchableOpacity>
           </View>
         </View>
-
       </SafeAreaView>
     </ImageBackground>
   );
