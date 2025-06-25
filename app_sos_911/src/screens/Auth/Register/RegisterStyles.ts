@@ -1,152 +1,207 @@
 // RegisterStyles.ts
-// Importamos los módulos necesarios de React Native para definir estilos y obtener las dimensiones de la pantalla.
+
 import { StyleSheet, Dimensions, Platform } from 'react-native';
 
-// Obtenemos el ancho y alto de la pantalla del dispositivo.
+
 const { width, height } = Dimensions.get('window');
 
-// Creamos los estilos para la pantalla de registro.
+
 export const RegisterStyles = StyleSheet.create({
   // Contenedor principal de la pantalla.
   container: {
-    flex: 1, // Ocupa todo el espacio disponible.
-    backgroundColor: '#f5f5f5', // Color de fondo gris claro.
+    flex: 1, 
+    backgroundColor: 'transparent',
   },
+
   
-  // Estilos para el contenido dentro del ScrollView.
+  keyboardAvoidingView: {
+    flex: 1,
+    paddingTop: Platform.OS === 'ios' ? 90 : 65,
+  },
+
+
   scrollContent: {
-    flexGrow: 1, // Permite que el contenido se expanda si es necesario.
-    paddingHorizontal: 20, // Espaciado lateral de 20 píxeles.
-    paddingBottom: 40, // Más espacio al final para que no quede pegado
+    flexGrow: 1,
+    paddingHorizontal: 20,
+    paddingBottom: 50,
+    justifyContent: 'flex-start',
   },
-  
-  // Contenedor del encabezado (título y subtítulo).
+
   headerContainer: {
-    paddingTop: Platform.OS === 'ios' ? 20 : 10, // Menos espacio arriba
-    paddingBottom: 20, // Espaciado inferior.
-    alignItems: 'center', // Centra el contenido horizontalmente.
+    paddingBottom: 20,
+    alignItems: 'center',
   },
-  
+
   // Estilo del título principal.
   title: {
-    fontSize: 26, // Tamaño de fuente grande.
-    fontWeight: 'bold', // Texto en negrita.
-    color: '#00ACAC', // Color verde azulado.
-    marginBottom: 8, // Espaciado inferior.
+    fontSize: 30,
+    fontWeight: '700',
+    color: '#fff',
+    marginBottom: 10,
   },
-  
+
   // Estilo del subtítulo.
   subtitle: {
-    fontSize: 15, // Tamaño de fuente mediano.
-    color: '#333', // Color de texto gris oscuro.
-    textAlign: 'center', // Centra el texto.
-    paddingHorizontal: 20, // Margen lateral.
+    fontSize: 16,
+    color: '#fff',
+    textAlign: 'center',
+    paddingHorizontal: 10,
+    lineHeight: 22,
   },
-  
+
   // Contenedor del formulario.
   formContainer: {
-    width: '100%', // Ocupa todo el ancho disponible.
-    paddingTop: 20, // Espaciado superior.
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    paddingVertical: 25,
+    paddingHorizontal: 25,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 8,
+    marginTop: 5,
   },
-  
+
   // Grupo de cada campo de entrada.
   inputGroup: {
-    marginBottom: 16, // Espaciado entre cada campo.
+    marginBottom: 20,
   },
-  
+
   // Estilo para las etiquetas de los inputs.
   label: {
-    fontSize: 14, // Tamaño de fuente pequeño.
-    color: '#444', // Color de texto gris oscuro.
-    marginBottom: 4, // Espaciado inferior.
-    marginLeft: 4, // Pequeño margen izquierdo.
+    fontSize: 15,
+    color: '#444',
+    marginBottom: 6,
+    marginLeft: 2,
+    fontWeight: '600',
   },
-  
-  // Estilo para los campos de entrada de texto.
-  input: {
-    backgroundColor: '#fff', // Fondo blanco.
-    borderRadius: 12, // Bordes redondeados.
-    height: 48, // Altura fija del campo.
-    paddingHorizontal: 16, // Espaciado interno horizontal.
-    fontSize: 16, // Tamaño de fuente mediano.
-    color: '#333', // Color del texto.
+
+
+  inputWithIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f9f9f9',
+    borderRadius: 12,
+    height: 52,
+    paddingHorizontal: 18,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
   },
-  
-  // Contenedor para los inputs de contraseña con icono de visibilidad.
+
+  icon: {
+    marginRight: 10,
+    color: '#999',
+  },
+
+  inputField: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: '400',
+    color: '#333',
+    paddingVertical: 0,
+  },
+
+
   passwordContainer: {
-    flexDirection: 'row', // Organiza los elementos en fila.
-    alignItems: 'center', // Alinea verticalmente los elementos.
-    backgroundColor: '#fff', // Fondo blanco.
-    borderRadius: 12, // Bordes redondeados.
-    height: 48, // Altura fija.
-    paddingHorizontal: 16, // Espaciado interno horizontal.
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f9f9f9',
+    borderRadius: 12,
+    height: 52,
+    paddingHorizontal: 18,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
   },
-  
-  // Estilo específico para los inputs de contraseña.
+
   passwordInput: {
-    flex: 1, // Ocupa todo el espacio disponible.
-    fontSize: 16, // Tamaño de fuente mediano.
-    color: '#333', // Color del texto.
+    flex: 1,
+    fontSize: 16,
+    color: '#333',
+    paddingVertical: 0,
   },
-  
-  // Botón de registro.
+
+
+  passwordToggle: {
+    paddingLeft: 10,
+  },
+
+
   registerButton: {
-    backgroundColor: '#00ACAC', // Color de fondo verde azulado.
-    borderRadius: 12, // Bordes redondeados.
-    height: 52, // Altura fija.
-    justifyContent: 'center', // Centra el texto verticalmente.
-    alignItems: 'center', // Centra el texto horizontalmente.
-    marginTop: 24, // Espaciado superior.
+    backgroundColor: '#008080',
+    borderRadius: 28,
+    height: 58,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+    shadowColor: '#008080',
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.3,
+    shadowRadius: 15,
+    elevation: 12,
   },
-  
-  // Texto dentro del botón de registro.
   registerButtonText: {
-    color: '#fff', // Color del texto blanco.
-    fontSize: 16, // Tamaño de fuente mediano.
-    fontWeight: '600', // Negrita media.
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '700',
+    letterSpacing: 0.8,
   },
-  
-  // Contenedor del mensaje de términos y condiciones.
+
+
   termsContainer: {
-    marginTop: 16, // Espaciado superior.
-    paddingHorizontal: 4, // Margen lateral mínimo.
+    marginTop: 20,
+    paddingHorizontal: 8,
   },
-  
-  // Estilo del texto de términos y condiciones.
+
+
   termsText: {
-    fontSize: 12, // Tamaño de fuente pequeño.
-    color: '#666', // Color de texto gris medio.
-    textAlign: 'center', // Centra el texto.
-    lineHeight: 16, // Espaciado entre líneas.
+    fontSize: 13,
+    color: '#777',
+    textAlign: 'center',
+    lineHeight: 18,
   },
-  
-  // Estilo para los enlaces dentro del texto de términos y condiciones.
+
   linkText: {
-    color: '#00ACAC', // Color verde azulado.
-    fontWeight: '600', // Negrita media.
-    textDecorationLine: 'underline', // Subrayado.
+    color: '#00ACAC',
+    fontWeight: '700',
+    textDecorationLine: 'underline',
   },
-  
-  // Contenedor para la sección de inicio de sesión.
+
+
   loginContainer: {
-    flexDirection: 'row', // Organiza los elementos en fila.
-    justifyContent: 'center', // Centra los elementos horizontalmente.
-    alignItems: 'center', // Alinea los elementos verticalmente.
-    marginTop: 24, // Más espacio arriba del enlace
-    marginBottom: 10, // Espacio abajo para evitar que quede pegado al borde
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 25,
+    marginBottom: 20,
   },
-  
-  // Texto informativo sobre la opción de iniciar sesión.
+
+
   loginText: {
-    color: '#666', // Color gris medio.
-    fontSize: 14, // Tamaño de fuente pequeño.
+    color: '#666',
+    fontSize: 15,
   },
-  
+
   // Estilo del enlace para iniciar sesión.
   loginLink: {
-    color: '#00ACAC', // Color verde azulado.
-    fontSize: 14, // Tamaño de fuente pequeño.
-    fontWeight: '600', // Negrita media.
-    marginLeft: 4, // Pequeño margen izquierdo para separación.
+    color: '#00ACAC',
+    fontSize: 15,
+    fontWeight: '700',
+    marginLeft: 6,
+  },
+
+  gradientBackground: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+
+
+  backButton: {
+    position: 'absolute',
+    top: Platform.OS === 'ios' ? 55 : 30,
+    left: 20,
+    zIndex: 10,
+    padding: 5,
   },
 });

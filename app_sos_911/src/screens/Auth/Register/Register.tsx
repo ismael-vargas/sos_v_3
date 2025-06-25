@@ -1,5 +1,4 @@
 // Register.tsx
-// Importaciones necesarias desde React y React Native
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -18,34 +17,33 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { RegisterStyles } from './RegisterStyles';
 import { RegisterScreenNavigationProp } from '../../../navigation/Navigator';
-import { crearCliente } from '../../../api/clientesService';
 import axios from 'axios';
+import { LinearGradient } from 'expo-linear-gradient';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-axios.defaults.withCredentials = true; // Permitir el envío de cookies en las solicitudes
 
-// Componente funcional para la pantalla de registro
+axios.defaults.withCredentials = true;
+
 export default function RegisterScreen() {
-  // Hook de navegación para manejar cambios de pantalla
   const navigation = useNavigation<RegisterScreenNavigationProp>();
-
-  // Estado local para almacenar los datos del formulario
   const [formData, setFormData] = useState({
     nombre: '',
     correo_electronico: '',
     cedula_identidad: '',
     direccion: '',
     contrasena_hash: '',
-    estado: 'activo' as 'activo' | 'inactivo', // Valor válido según la interfaz
-    numero_ayudas: 0, // Valor predeterminado
-    estado_eliminado: 'activo' as 'activo' | 'eliminado', // Valor válido según la interfaz
+    estado: 'activo' as 'activo' | 'inactivo',
+    numero_ayudas: 0,
+    estado_eliminado: 'activo' as 'activo' | 'eliminado',
   });
 
   const [csrfToken, setCsrfToken] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     const fetchCsrfToken = async () => {
       try {
-        const response = await axios.get('http://192.168.1.31:9000/csrf-token'); // Ruta para obtener el token CSRF
+        const response = await axios.get('http://192.168.1.31:9000/csrf-token');
         setCsrfToken(response.data.csrfToken);
       } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
@@ -64,21 +62,20 @@ export default function RegisterScreen() {
     fetchCsrfToken();
   }, []);
 
-  // Función para manejar el registro del usuario
   const handleRegister = async () => {
     try {
       const response = await axios.post(
-        'http://192.168.1.31:9000/registro-clientes', // Ruta para registrar el cliente
+        'http://192.168.1.31:9000/clientes/registro',
         formData,
         {
           headers: {
-            'X-CSRF-Token': csrfToken, // Incluir el token CSRF en los encabezados
+            'X-CSRF-Token': csrfToken,
           },
         }
       );
 
       Alert.alert('Éxito', 'Cliente registrado exitosamente.');
-      navigation.navigate('Login'); // Navegar a la pantalla de inicio de sesión
+      navigation.navigate('Login');
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         console.error('Error de Axios al registrar cliente:', error.response?.data || error.message);
@@ -94,131 +91,164 @@ export default function RegisterScreen() {
   };
 
   return (
-    // Contenedor seguro para manejar los bordes de la pantalla en dispositivos modernos
-    <SafeAreaView style={RegisterStyles.container}>
-      {/* Configuración de la barra de estado */}
-      <StatusBar barStyle="light-content" backgroundColor="#00ACAC" />
-      
-      {/* Evita que el teclado cubra los campos en iOS */}
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={{ flex: 1 }}
-      >
-        {/* Permite cerrar el teclado al tocar fuera de los campos de entrada */}
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={RegisterStyles.scrollContent}
-            bounces={false}
-          >
-            {/* Encabezado de la pantalla */}
-            <View style={RegisterStyles.headerContainer}>
-              <Text style={RegisterStyles.title}>Crear Cuenta</Text>
-              <Text style={RegisterStyles.subtitle}>
-                Completa tus datos para comenzar
-              </Text>
-            </View>
+    <LinearGradient
+      colors={['#026b6b', '#2D353C']}
+      start={{ x: 0, y: 1 }}
+      end={{ x: 1, y: 0 }}
+      style={RegisterStyles.gradientBackground}
+    >
+      <SafeAreaView style={RegisterStyles.container}>
 
-            {/* Contenedor del formulario de registro */}
-            <View style={RegisterStyles.formContainer}>
-              {/* Campo de entrada para el nombre completo */}
-              <View style={RegisterStyles.inputGroup}>
-                <Text style={RegisterStyles.label}>Nombre completo</Text>
-                <TextInput
-                  style={RegisterStyles.input}
-                  placeholder="Ej: Juan Pérez"
-                  placeholderTextColor="#999"
-                  value={formData.nombre}
-                  onChangeText={(text) => setFormData({ ...formData, nombre: text })}
-                  returnKeyType="next"
-                  autoCorrect={false}
-                />
+        <StatusBar barStyle="light-content" backgroundColor="#00ACAC" />
+
+        {/* Botón de regresar: Mantenemos su posición aquí fuera del ScrollView */}
+        <TouchableOpacity
+          style={RegisterStyles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+        
+          <Icon name="chevron-left" size={28} color="#fff" /> 
+        </TouchableOpacity>
+
+        {/* El resto del contenido, que sí se desplaza */}
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={RegisterStyles.keyboardAvoidingView}
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={RegisterStyles.scrollContent}
+              keyboardShouldPersistTaps="handled"
+            >
+
+        
+              <View style={RegisterStyles.headerContainer}>
+                <Text style={RegisterStyles.title}>Crear Cuenta</Text>
+                <Text style={RegisterStyles.subtitle}>
+                  Completa tus datos para comenzar
+                </Text>
               </View>
 
-              {/* Campo de entrada para el correo electrónico */}
-              <View style={RegisterStyles.inputGroup}>
-                <Text style={RegisterStyles.label}>Correo electrónico</Text>
-                <TextInput
-                  style={RegisterStyles.input}
-                  placeholder="tu@email.com"
-                  placeholderTextColor="#999"
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  value={formData.correo_electronico}
-                  onChangeText={(text) =>
-                    setFormData({ ...formData, correo_electronico: text })
-                  }
-                  returnKeyType="next"
-                />
-              </View>
+              <View style={RegisterStyles.formContainer}>
+                {/* Campos de entrada ... */}
+                <View style={RegisterStyles.inputGroup}>
+                  <Text style={RegisterStyles.label}>Nombre completo *</Text>
+                  <View style={RegisterStyles.inputWithIcon}>
+                    <Icon name="account" size={20} color="#999" style={RegisterStyles.icon} />
+                    <TextInput
+                      style={RegisterStyles.inputField}
+                      placeholder="Nombre"
+                      placeholderTextColor="#999"
+                      value={formData.nombre}
+                      onChangeText={(text) => setFormData({ ...formData, nombre: text })}
+                      returnKeyType="next"
+                      autoCorrect={false}
+                    />
+                  </View>
+                </View>
 
-              {/* Campo de entrada para el número de identificación */}
-              <View style={RegisterStyles.inputGroup}>
-                <Text style={RegisterStyles.label}>Número de identificación</Text>
-                <TextInput
-                  style={RegisterStyles.input}
-                  placeholder="Tu número de ID"
-                  placeholderTextColor="#999"
-                  value={formData.cedula_identidad}
-                  onChangeText={(text) =>
-                    setFormData({ ...formData, cedula_identidad: text })
-                  }
-                  returnKeyType="next"
-                />
-              </View>
+                <View style={RegisterStyles.inputGroup}>
+                  <Text style={RegisterStyles.label}>Correo electrónico *</Text>
+                  <View style={RegisterStyles.inputWithIcon}>
+                    <Icon name="email" size={20} color="#999" style={RegisterStyles.icon} />
+                    <TextInput
+                      style={RegisterStyles.inputField}
+                      placeholder="Correo"
+                      placeholderTextColor="#999"
+                      keyboardType="email-address"
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      value={formData.correo_electronico}
+                      onChangeText={(text) =>
+                        setFormData({ ...formData, correo_electronico: text })
+                      }
+                      returnKeyType="next"
+                    />
+                  </View>
+                </View>
 
-              {/* Campo de entrada para la dirección */}
-              <View style={RegisterStyles.inputGroup}>
-                <Text style={RegisterStyles.label}>Dirección</Text>
-                <TextInput
-                  style={RegisterStyles.input}
-                  placeholder="Tu dirección completa"
-                  placeholderTextColor="#999"
-                  value={formData.direccion}
-                  onChangeText={(text) =>
-                    setFormData({ ...formData, direccion: text })
-                  }
-                  returnKeyType="next"
-                />
-              </View>
+                <View style={RegisterStyles.inputGroup}>
+                  <Text style={RegisterStyles.label}>Cédula *</Text>
+                  <View style={RegisterStyles.inputWithIcon}>
+                    <Icon name="credit-card-outline" size={20} color="#999" style={RegisterStyles.icon} />
+                    <TextInput
+                      style={RegisterStyles.inputField}
+                      placeholder="Cédula"
+                      placeholderTextColor="#999"
+                      value={formData.cedula_identidad}
+                      onChangeText={(text) =>
+                        setFormData({ ...formData, cedula_identidad: text })
+                      }
+                      returnKeyType="next"
+                    />
+                  </View>
+                </View>
 
-              {/* Campo de entrada para la contraseña */}
-              <View style={RegisterStyles.inputGroup}>
-                <Text style={RegisterStyles.label}>Contraseña</Text>
-                <TextInput
-                  style={RegisterStyles.input}
-                  placeholder="Mínimo 8 caracteres"
-                  placeholderTextColor="#999"
-                  secureTextEntry
-                  value={formData.contrasena_hash}
-                  onChangeText={(text) =>
-                    setFormData({ ...formData, contrasena_hash: text })
-                  }
-                  returnKeyType="done"
-                />
-              </View>
+                <View style={RegisterStyles.inputGroup}>
+                  <Text style={RegisterStyles.label}>Dirección *</Text>
+                  <View style={RegisterStyles.inputWithIcon}>
+                    <Icon name="map-marker" size={20} color="#999" style={RegisterStyles.icon} />
+                    <TextInput
+                      style={RegisterStyles.inputField}
+                      placeholder="Dirección"
+                      placeholderTextColor="#999"
+                      value={formData.direccion}
+                      onChangeText={(text) =>
+                        setFormData({ ...formData, direccion: text })
+                      }
+                      returnKeyType="next"
+                    />
+                  </View>
+                </View>
 
-              {/* Botón de registro */}
-              <TouchableOpacity
-                style={RegisterStyles.registerButton}
-                onPress={handleRegister}
-                activeOpacity={0.7}
-              >
-                <Text style={RegisterStyles.registerButtonText}>Registrarse</Text>
-              </TouchableOpacity>
+                <View style={RegisterStyles.inputGroup}>
+                  <Text style={RegisterStyles.label}>Contraseña *</Text>
+                  <View style={RegisterStyles.passwordContainer}>
+                    <Icon name="lock" size={20} color="#999" style={RegisterStyles.icon} />
+                    <TextInput
+                      style={RegisterStyles.passwordInput}
+                      placeholder="Contraseña"
+                      placeholderTextColor="#999"
+                      secureTextEntry={!showPassword}
+                      value={formData.contrasena_hash}
+                      onChangeText={(text) =>
+                        setFormData({ ...formData, contrasena_hash: text })
+                      }
+                      returnKeyType="done"
+                    />
+                    <TouchableOpacity
+                      onPress={() => setShowPassword(!showPassword)}
+                      style={RegisterStyles.passwordToggle}
+                    >
+                      <Icon
+                        name={showPassword ? 'eye-off' : 'eye'}
+                        size={20}
+                        color="#999"
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
 
-              {/* Enlace para iniciar sesión si ya tiene una cuenta */}
-              <View style={RegisterStyles.loginContainer}>
-                <Text style={RegisterStyles.loginText}>¿Ya tienes una cuenta?</Text>
-                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                  <Text style={RegisterStyles.loginLink}>Iniciar sesión</Text>
+                <TouchableOpacity
+                  style={RegisterStyles.registerButton}
+                  onPress={handleRegister}
+                  activeOpacity={0.7}
+                >
+                  <Text style={RegisterStyles.registerButtonText}>Registrarse</Text>
                 </TouchableOpacity>
+
+                <View style={RegisterStyles.loginContainer}>
+                  <Text style={RegisterStyles.loginText}>¿Ya tienes una cuenta?</Text>
+                  <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                    <Text style={RegisterStyles.loginLink}>Iniciar sesión</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+            </ScrollView>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 }

@@ -6,7 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   SafeAreaView,
-  ImageBackground,
+  ImageBackground, // No se usa ImageBackground en el código actual, pero lo mantengo si lo tenías para algo más.
   Image,
   Alert,
   ActivityIndicator,
@@ -15,6 +15,10 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { LoginScreenNavigationProp } from '../../../navigation/Navigator';
 import { LoginStyles } from './LoginStyles';
+import { LinearGradient } from 'expo-linear-gradient';
+// Importamos Icon aquí
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 axios.defaults.withCredentials = true;
 
@@ -46,51 +50,53 @@ export default function LoginScreen() {
   }, []);
 
   // Manejar el inicio de sesión
-const handleLogin = async () => {
-  if (!email || !password) {
-    Alert.alert('Error', 'Por favor ingrese email y contraseña');
-    return;
-  }
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Por favor ingrese email y contraseña');
+      return;
+    }
 
-  setIsLoading(true);
-  
-  try {
-    const response = await axios.post(
-      'http://192.168.1.31:9000/login-clientes',
-      {
-        correo_electronico: email,
-        contrasena_hash: password,
-      },
-      {
-        headers: {
-          'X-CSRF-Token': csrfToken,
+    setIsLoading(true);
+
+    try {
+      const response = await axios.post(
+        'http://192.168.1.31:9000/clientes/login',
+        {
+          correo_electronico: email,
+          contrasena_hash: password,
         },
-      }
-    );
+        {
+          headers: {
+            'X-CSRF-Token': csrfToken,
+          },
+        }
+      );
 
-    if (response.data.success) {
-      // Guardar datos de usuario en tu estado/contexto/async storage
-      Alert.alert('Éxito', 'Inicio de sesión exitoso');
-      navigation.navigate('Home');
-    } else {
-      Alert.alert('Error', response.data.message);
+      if (response.data.success) {
+        // Guardar datos de usuario en tu estado/contexto/async storage
+        Alert.alert('Éxito', 'Inicio de sesión exitoso');
+        navigation.navigate('Home');
+      } else {
+        Alert.alert('Error', response.data.message);
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        Alert.alert('Error', error.response?.data?.message || 'Error al iniciar sesión');
+      } else {
+        Alert.alert('Error', 'Error desconocido');
+      }
+    } finally {
+      setIsLoading(false);
     }
-  } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      Alert.alert('Error', error.response?.data?.message || 'Error al iniciar sesión');
-    } else {
-      Alert.alert('Error', 'Error desconocido');
-    }
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
   return (
-    <ImageBackground
-      source={require('../../../assets/fondo1.jpg')}
-      style={LoginStyles.backgroundImage}
-      resizeMode="cover"
+    <LinearGradient
+      colors={['#026b6b', '#2D353C']}
+      start={{ x: 0, y: 1 }}
+      end={{ x: 1, y: 0 }}
+      style={LoginStyles.backgroundGradient}
     >
+
       <SafeAreaView style={LoginStyles.container}>
         <View style={LoginStyles.logoContainer}>
           <Image
@@ -106,23 +112,33 @@ const handleLogin = async () => {
         </View>
 
         <View style={LoginStyles.inputContainer}>
-          <TextInput
-            placeholder="Correo electrónico"
-            value={email}
-            onChangeText={setEmail}
-            style={LoginStyles.input}
-            autoCapitalize="none"
-            keyboardType="email-address"
-          />
+          {/* Campo de Correo Electrónico con icono */}
+          <View style={LoginStyles.inputWrapper}>
+            <Icon name="email" size={20} color="#999" style={LoginStyles.icon} />
+            <TextInput
+              placeholder="Correo electrónico"
+              value={email}
+              onChangeText={setEmail}
+              style={LoginStyles.inputField} // Usar el nuevo estilo para el TextInput
+              autoCapitalize="none"
+              keyboardType="email-address"
+              placeholderTextColor="#999" // Asegurar que el placeholder sea visible
+            />
+          </View>
 
-          <TextInput
-            placeholder="Contraseña"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            style={LoginStyles.input}
-            autoCapitalize="none"
-          />
+          {/* Campo de Contraseña con icono */}
+          <View style={LoginStyles.inputWrapper}>
+            <Icon name="lock" size={20} color="#999" style={LoginStyles.icon} />
+            <TextInput
+              placeholder="Contraseña"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              style={LoginStyles.inputField} // Usar el nuevo estilo para el TextInput
+              autoCapitalize="none"
+              placeholderTextColor="#999" // Asegurar que el placeholder sea visible
+            />
+          </View>
 
           <TouchableOpacity
             onPress={handleLogin}
@@ -144,6 +160,6 @@ const handleLogin = async () => {
           </View>
         </View>
       </SafeAreaView>
-    </ImageBackground>
+    </LinearGradient>
   );
 }

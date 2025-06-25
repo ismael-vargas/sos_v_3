@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 
 // Definimos los estilos de la pantalla de inicio de sesión
 export const LoginStyles = StyleSheet.create({
-  
+
   // Contenedor principal que centra todos los elementos en la pantalla
   container: {
     flex: 1, // Ocupa toda la pantalla
@@ -13,11 +13,12 @@ export const LoginStyles = StyleSheet.create({
   },
 
   // Imagen de fondo que cubre toda la pantalla
-  backgroundImage: {
-    flex: 1, // Permite que la imagen de fondo ocupe todo el espacio disponible
-    width: '100%', // Asegura que la imagen se expanda al ancho completo
-    height: '100%', // Asegura que la imagen se expanda al alto completo
+  backgroundGradient: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
   },
+
 
   // Contenedor del logo y título
   logoContainer: {
@@ -44,7 +45,7 @@ export const LoginStyles = StyleSheet.create({
   // Estilo para la palabra "Sos" dentro del título
   sosText: {
     fontWeight: 'bold', // Negrita para destacar
-     color: '#fff', // Color oscuro para contraste
+    color: '#fff', // Color oscuro para contraste
   },
 
   // Estilo para "911" dentro del título
@@ -54,7 +55,7 @@ export const LoginStyles = StyleSheet.create({
   },
 
   // Estilo del subtítulo que indica que el usuario debe iniciar sesión
- subtitle: {
+  subtitle: {
     fontSize: 16, // Tamaño de fuente moderado
     fontWeight: '400', // Peso de fuente normal
     color: '#fff', // Cambiado a blanco para mejor visibilidad
@@ -68,21 +69,55 @@ export const LoginStyles = StyleSheet.create({
     maxWidth: 400, // Evita que los inputs sean demasiado grandes en pantallas grandes
   },
 
-  // Estilos para los campos de entrada de email y contraseña
-  input: {
-    backgroundColor: '#fff', // Fondo blanco para mejor visibilidad
-    borderRadius: 10, // Bordes redondeados
-    padding: 15, // Espaciado interno para mejorar la usabilidad
-    marginBottom: 15, // Espaciado entre los inputs
-    shadowColor: '#000', // Sombra sutil para un efecto elevado
+  // ***** NUEVOS ESTILOS PARA INPUTS CON ICONOS *****
+  // Envoltorio para el TextInput y el Icon
+  inputWrapper: {
+    flexDirection: 'row', // Para que el icono y el texto estén en la misma fila
+    alignItems: 'center', // Centra verticalmente el icono y el texto
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    marginBottom: 15,
+    shadowColor: '#000',
     shadowOffset: {
-      width: 0, // No hay desplazamiento horizontal de la sombra
-      height: 2, // Sombra ligeramente desplazada hacia abajo
+      width: 0,
+      height: 2,
     },
-    shadowOpacity: 0.05, // Opacidad baja para un efecto suave
-    shadowRadius: 3.84, // Difuminado de la sombra
-    elevation: 5, // Efecto de sombra en Android
+    shadowOpacity: 0.05,
+    shadowRadius: 3.84,
+    elevation: 5,
+    paddingHorizontal: 15, // Añadir padding horizontal aquí
+    height: 50, // Altura fija para el contenedor
   },
+  // Estilo para el icono dentro del input
+  icon: {
+    marginRight: 10, // Espacio a la derecha del icono
+    color: '#999', // Color del icono
+  },
+  // Estilo del TextInput cuando hay un icono
+  inputField: {
+    flex: 1, // Para que el TextInput ocupe el resto del espacio disponible
+    paddingVertical: 0, // Ajustar el padding vertical del input
+    fontSize: 16, // Tamaño de fuente para el texto del input
+    color: '#333', // Color del texto del input
+  },
+  // **********************************************
+
+
+  // Se eliminan los estilos 'input' originales que solo se aplicaban al TextInput directamente
+  // input: {
+  //   backgroundColor: '#fff',
+  //   borderRadius: 10,
+  //   padding: 15,
+  //   marginBottom: 15,
+  //   shadowColor: '#000',
+  //   shadowOffset: {
+  //     width: 0,
+  //     height: 2,
+  //   },
+  //   shadowOpacity: 0.05,
+  //   shadowRadius: 3.84,
+  //   elevation: 5,
+  // },
 
   // Botón de inicio de sesión
   loginButton: {
@@ -97,7 +132,7 @@ export const LoginStyles = StyleSheet.create({
   // Texto dentro del botón de inicio de sesión
   loginButtonText: {
     color: '#fff', // Texto en color blanco para contrastar con el fondo
-    fontSize: 16, // Tamaño de fuente adecuado para la lectura
+    fontSize: 18, // Tamaño de fuente adecuado para la lectura
     fontWeight: '600', // Peso medio para resaltar
   },
 
@@ -105,6 +140,7 @@ export const LoginStyles = StyleSheet.create({
   registerContainer: {
     flexDirection: 'row', // Alinea los elementos en una fila
     marginTop: 20, // Espaciado superior
+     justifyContent: 'center', 
   },
 
   // Texto que pregunta si el usuario tiene cuenta
