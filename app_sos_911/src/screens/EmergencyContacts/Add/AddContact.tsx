@@ -18,6 +18,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../types';
 import { styles } from './AddContactStyles';
 import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 type AddContactProps = StackScreenProps<RootStackParamList, 'AddContact'>;
@@ -70,7 +71,12 @@ const AddContact = ({ navigation, route }: AddContactProps) => {
   };
 
   return (
-    <ImageBackground source={require('../../../assets/fondo.png')} style={styles.backgroundImage}>
+    <LinearGradient
+    colors={['#1d7a7a', '#0f172a']}
+    style={styles.backgroundImage}
+    start={{ x: 0, y: 1 }}
+    end={{ x: 1, y: 0 }}
+  >
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
@@ -117,7 +123,7 @@ const AddContact = ({ navigation, route }: AddContactProps) => {
           </SafeAreaView>
         </ScrollView>
       </KeyboardAvoidingView>
-    </ImageBackground>
+     </LinearGradient>
   );
 };
 

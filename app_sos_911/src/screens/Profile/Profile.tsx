@@ -5,6 +5,7 @@ import { styles } from "./profileStyles";
 import { AntDesign } from "@expo/vector-icons"; // Importar el icono de lápiz
 import Header from "../../components/Header/Header";
 import CustomSidebar from "../../components/Sidebar/Sidebar";
+import { LinearGradient } from 'expo-linear-gradient';
 
 const ProfileScreen = () => {
   const [fullName, setFullName] = useState("Diana Zambrano");
@@ -44,11 +45,12 @@ const ProfileScreen = () => {
   };
 
   return (
-    <ImageBackground 
-      source={require("../../assets/fondo.png")} 
-      style={styles.backgroundImage}
-      resizeMode="cover"
-    >
+ <LinearGradient
+  colors={['#1d7a7a', '#0f172a']}
+  style={styles.backgroundImage}
+  start={{ x: 0, y: 1 }}
+  end={{ x: 1, y: 0 }}
+>
       <View style={styles.container}>
         <Header onMenuPress={() => setSidebarOpen(true)} customTitle="Ver Perfil" />
 
@@ -144,7 +146,7 @@ const ProfileScreen = () => {
         </ScrollView>
       </View>
       <CustomSidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
-    </ImageBackground>
+    </LinearGradient>
   );
 };
 

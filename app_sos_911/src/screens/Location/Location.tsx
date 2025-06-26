@@ -14,6 +14,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import SeeLocations from './SeeLocations/SeeLocations';
 import Header from '../../components/Header/Header';
 import CustomSidebar from '../../components/Sidebar/Sidebar';
+import { LinearGradient } from 'expo-linear-gradient';
 
 type RootStackParamList = {
   LocationScreen: undefined;
@@ -117,11 +118,13 @@ const LocationScreen = () => {
   };
 
   return (
-    <ImageBackground
-      source={require('../../assets/fondo.png')}
-      style={styles.backgroundImage}
-      resizeMode="cover"
-    >
+   <LinearGradient
+     colors={['#1d7a7a', '#0f172a']}
+     style={styles.backgroundImage}
+     start={{ x: 0, y: 1 }}
+     end={{ x: 1, y: 0 }}
+   >
+        
       <SafeAreaView style={styles.container}>
         <Header
           onMenuPress={() => setSidebarOpen(true)}
@@ -180,7 +183,7 @@ const LocationScreen = () => {
           onClose={() => setSidebarOpen(false)}
         />
       </SafeAreaView>
-    </ImageBackground>
+      </LinearGradient>
   );
 };
 

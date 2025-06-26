@@ -3,6 +3,8 @@ import { ImageBackground, SafeAreaView, ScrollView, View, Text } from 'react-nat
 import Header from '../../components/Header/Header';
 import CustomSidebar from '../../components/Sidebar/Sidebar';
 import styles from './AlertHistoryStyles';
+import { ShieldAlert, Siren, Calendar, MapPin } from 'lucide-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 // Definición de tipos para las alertas
 type AlertType = 'SOS' | '911';
@@ -18,11 +20,59 @@ const alertHistory: { id: number; type: AlertType; date: string; location: strin
     { id: 6, type: '911', date: '02-05-24 / 11:45:55 pm', location: 'Barrio La Floresta, Quito, Ecuador', status: 'Activo' },
 ];
 
+const AlertCard = ({ alert }: { alert: { id: number; type: AlertType; date: string; location: string; status: AlertStatus } }) => {
+  const isSOS = alert.type === 'SOS';
+  const borderStyle = isSOS ? styles.borderSOS : styles.border911;
+  const icon = isSOS ? (
+    <Siren size={38} color="#FF9E5D" />
+  ) : (
+    <ShieldAlert size={38} color="#FF4D4D" />
+  );
+  const statusStyle = [
+    styles.statusBadge,
+    alert.status === 'Resuelto' ? styles.status_resuelto : styles.status_activo,
+  ];
+  return (
+    <View style={[styles.alertCard, borderStyle]}>
+      <View style={styles.iconContainer}>{icon}</View>
+      <View style={styles.cardContent}>
+        <View style={styles.headerRow}>
+          <View style={styles.alertTitleBlock}>
+            <Text style={styles.alertType}>{alert.type}</Text>
+            <Text style={styles.alertSubtitle}>Alerta de Seguridad</Text>
+          </View>
+          <Text style={statusStyle}>{alert.status}</Text>
+        </View>
+        <View style={styles.divider} />
+        <View style={styles.infoRow}>
+          <Calendar size={20} color="#888" style={styles.infoIcon} />
+          <View style={styles.infoBlock}>
+            <Text style={styles.infoLabel}>Fecha y Hora</Text>
+            <Text style={styles.infoValue}>{alert.date}</Text>
+          </View>
+        </View>
+        <View style={styles.infoRow}>
+          <MapPin size={20} color="#888" style={styles.infoIcon} />
+          <View style={styles.infoBlock}>
+            <Text style={styles.infoLabel}>Ubicación</Text>
+            <Text style={styles.infoValue}>{alert.location}</Text>
+          </View>
+        </View>
+      </View>
+    </View>
+  );
+};
+
 const AlertHistoryComponent = ({ navigation }: { navigation: any }) => {
     const [isSidebarOpen, setSidebarOpen] = useState(false);
 
     return (
-        <ImageBackground source={require('../../assets/fondo.png')} style={styles.backgroundImage}>
+       <LinearGradient
+  colors={['#1d7a7a', '#0f172a']}
+  style={styles.backgroundImage}
+  start={{ x: 0, y: 1 }}
+  end={{ x: 1, y: 0 }}
+>
             <SafeAreaView style={styles.container}>
                 
                 {/* 📌 Corregido: Ahora el menú lleva a Historial de Alertas */}
@@ -32,16 +82,7 @@ const AlertHistoryComponent = ({ navigation }: { navigation: any }) => {
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
                     {alertHistory.length > 0 ? (
                         alertHistory.map(alert => (
-                            <View key={alert.id} style={styles.alertCard}>
-                                <View style={styles.alertHeader}>
-                                    <Text style={styles.alertType}>{alert.type}</Text>
-                                    <Text style={[styles.alertStatus, alert.status === 'Resuelto' ? styles.status_resuelto : styles.status_activo]}>
-                                        {alert.status}
-                                    </Text>
-                                </View>
-                                <Text style={styles.alertText}><Text style={styles.boldText}>📅 Fecha:</Text> {alert.date}</Text>
-                                <Text style={styles.alertText}><Text style={styles.boldText}>📍 Ubicación:</Text> {alert.location}</Text>
-                            </View>
+                          <AlertCard key={alert.id} alert={alert} />
                         ))
                     ) : (
                         <Text style={styles.noDataText}>No hay alertas disponibles.</Text>
@@ -50,7 +91,7 @@ const AlertHistoryComponent = ({ navigation }: { navigation: any }) => {
 
                 <CustomSidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
             </SafeAreaView>
-        </ImageBackground>
+        </LinearGradient>
     );
 };
 

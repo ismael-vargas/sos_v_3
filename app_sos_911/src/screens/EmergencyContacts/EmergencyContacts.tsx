@@ -13,7 +13,8 @@ import { Plus, Trash2 } from 'lucide-react-native';// Íconos utilizados para ag
 import CustomSidebar from '../../components/Sidebar/Sidebar';// Componente personalizado para la barra lateral
 import Header from '../../components/Header/Header';// Componente de encabezado
 import { styles } from './EmergencyContactsStyles'; // Estilos de la pantalla
-import { normalize } from '../../utils/dimensions';// Utilidad para normalizar el tamaño de los íconos
+import { normalize } from '../../utils/dimensions';// Utilidad para normalizar el tamaño de los íconos 
+import { LinearGradient } from 'expo-linear-gradient';
 
 const EmergencyContactsScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const [contacts, setContacts] = useState<any[]>([
@@ -58,11 +59,11 @@ const EmergencyContactsScreen: React.FC<{ navigation: any }> = ({ navigation }) 
       ],
     );
   };
-// Función para agregar un nuevo contacto a la lista
+  // Función para agregar un nuevo contacto a la lista
   const addContact = (contact: any) => {
     setContacts(prevContacts => [...prevContacts, contact]);
   };
- // Función para renderizar cada tarjeta de contacto
+  // Función para renderizar cada tarjeta de contacto
   const renderContactCard = (contact: any) => (
     <View key={contact.id} style={styles.contactCard}>
       <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(contact.id)}>
@@ -84,7 +85,12 @@ const EmergencyContactsScreen: React.FC<{ navigation: any }> = ({ navigation }) 
 
   return (
     // Fondo de pantalla con imagen
-    <ImageBackground source={require('../../assets/fondo.png')} style={styles.backgroundImage} resizeMode="cover">
+  <LinearGradient
+  colors={['#1d7a7a', '#0f172a']}
+  style={styles.backgroundImage}
+  start={{ x: 0, y: 1 }}
+  end={{ x: 1, y: 0 }}
+>
       <SafeAreaView style={styles.container}>
         <Header onMenuPress={() => setSidebarOpen(true)} customTitle="Contactos de Emergencia" />
 
@@ -102,7 +108,7 @@ const EmergencyContactsScreen: React.FC<{ navigation: any }> = ({ navigation }) 
 
         <CustomSidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
       </SafeAreaView>
-    </ImageBackground>
+     </LinearGradient>
   );
 };
 

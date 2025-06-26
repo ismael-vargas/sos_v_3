@@ -336,11 +336,12 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   };
 
   return (
-    <ImageBackground
-      source={require('../../assets/fondo.png')}
-      style={styles.backgroundImage}
-      resizeMode="cover"
-    >
+<LinearGradient
+  colors={['#1d7a7a', '#0f172a']}
+  style={styles.backgroundImage}
+  start={{ x: 0, y: 1 }}
+  end={{ x: 1, y: 0 }}
+>
       <SafeAreaView style={styles.container}>
         <Header onMenuPress={() => setSidebarOpen(true)} />
 
@@ -381,7 +382,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           onClose={() => setSidebarOpen(false)}
         />
       </SafeAreaView>
-    </ImageBackground>
+    </LinearGradient>
   );
 };
 

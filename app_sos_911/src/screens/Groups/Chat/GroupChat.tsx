@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Header from '../../../components/Header/Header';
 import styles from './GroupChatStyles';
 import { GroupChatScreenProps } from '../../../navigation/Navigator';
+import { LinearGradient } from 'expo-linear-gradient';
 
 interface Message {
   id: string;
@@ -68,11 +69,14 @@ const GroupChat: React.FC<GroupChatScreenProps> = ({ route, navigation }) => {
   );
 
   return (
-    <ImageBackground 
-      source={require('../../../assets/fondo.png')} 
-      style={styles.backgroundImage}
-      resizeMode="cover"
-    >
+    <LinearGradient
+       colors={['#1d7a7a', '#0f172a']}
+       style={styles.backgroundImage}
+       start={{ x: 0, y: 1 }}
+       end={{ x: 1, y: 0 }}
+     >
+
+
       <SafeAreaView style={styles.container}>
         <Header 
           customTitle={group.name}
@@ -114,7 +118,7 @@ const GroupChat: React.FC<GroupChatScreenProps> = ({ route, navigation }) => {
           </TouchableOpacity>
         </KeyboardAvoidingView>
       </SafeAreaView>
-    </ImageBackground>
+      </LinearGradient>
   );
 };
 

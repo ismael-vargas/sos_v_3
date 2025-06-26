@@ -3,8 +3,9 @@ export interface Notification {
   title: string;
   description: string;
   time: string;
-  type?: 'grupo' | 'clientes'; // Cambia 'persona' por 'clientes'
+  type: 'grupo' | 'clientes';
   group?: string;
+  alertType: 'sos' | '911' | 'unnecessary';
 }
 
 export interface NotificationsProps {

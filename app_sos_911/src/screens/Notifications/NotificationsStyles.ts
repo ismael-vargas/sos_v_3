@@ -88,11 +88,12 @@ export const styles = StyleSheet.create({
 
   // Imagen de perfil o ícono dentro de la notificación
   profileImage: {
-    width: normalize(50),
-    height: normalize(50),
-    borderRadius: normalize(25), // Imagen circular
+    width: normalize(48),
+    height: normalize(48),
+    borderRadius: normalize(24),
     borderWidth: 2,
-    borderColor: '#ffffff', // Borde blanco para resaltar
+    borderColor: '#fff',
+    marginLeft: normalize(8),
   },
 
   // Contenedor de las acciones dentro de la notificación
@@ -161,5 +162,76 @@ export const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
     marginLeft: normalize(10), // Espaciado entre el ícono y el texto
+  },
+
+  // Agrega los estilos para la tarjeta tipo web
+  // Estilos para la tarjeta tipo web con barra lateral
+  cardContainer: {
+    flexDirection: 'row',
+    alignItems: 'stretch',
+    backgroundColor: 'transparent',
+    borderRadius: normalize(18),
+    marginBottom: normalize(18),
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    elevation: 6,
+    maxWidth: '100%',
+    minHeight: normalize(110),
+  },
+  sideBar: {
+    width: normalize(48),
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderTopLeftRadius: normalize(18),
+    borderBottomLeftRadius: normalize(18),
+  },
+  cardContent: {
+    flex: 1,
+    backgroundColor: '#fff',
+    borderTopRightRadius: normalize(18),
+    borderBottomRightRadius: normalize(18),
+    padding: normalize(16),
+    justifyContent: 'center',
+  },
+  notificationContentWeb: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: normalize(10),
+  },
+  // Colores de barra lateral
+  sosBar: {
+    backgroundColor: '#FF9E5D',
+  },
+  alert911Bar: {
+    backgroundColor: '#FF4D4D',
+  },
+  unnecessaryBar: {
+    backgroundColor: '#2F7E70',
+  },
+  // Botones de acción
+  actionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: normalize(10),
+    paddingVertical: normalize(10),
+    width: '100%',
+    marginTop: normalize(4),
+  },
+  sosButton: {
+    backgroundColor: '#FF9E5D',
+  },
+  alert911Button: {
+    backgroundColor: '#FF4D4D',
+  },
+  unnecessaryButton: {
+    backgroundColor: '#2F7E70',
+  },
+  actionButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: normalize(14),
   },
 });

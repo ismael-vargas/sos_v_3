@@ -13,43 +13,69 @@ import {
   TouchableOpacity,
   Modal,
 } from 'react-native';
-import { XCircle, ArrowRight } from 'lucide-react-native'; // Íconos para las acciones
+import { ShieldAlert, Siren, Bell, XCircle, MapPin } from 'lucide-react-native'; // Íconos para las acciones
 import CustomSidebar from '../../components/Sidebar/Sidebar'; // Sidebar personalizado
 import Header from '../../components/Header/Header'; // Encabezado de la pantalla
 import { styles } from './NotificationsStyles'; // Estilos de la pantalla
 import { Notification, NotificationsProps } from './types'; // Tipos de datos
 import { normalize } from '../../utils/dimensions'; // Función para normalizar tamaños en distintas pantallas
 import MapView, { Marker } from 'react-native-maps'; // Agrega esto si tienes react-native-maps instalado
+import { LinearGradient } from 'expo-linear-gradient';
+
+const initialNotifications: Notification[] = [
+  {
+    id: '1',
+    title: 'Alerta : SOS',
+    description: 'Familia: Me caí de la moto.',
+    time: 'Hace 30 minutos',
+    type: 'grupo',
+    group: 'Comunidad San Jose',
+    alertType: 'sos',
+  },
+  {
+    id: '2',
+    title: 'Alerta : 911',
+    description: 'Cercano: Pablo Vargas - Ayuda urgente.',
+    time: 'Hace 40 minutos',
+    type: 'clientes',
+    alertType: '911',
+  },
+  {
+    id: '3',
+    title: 'Alerta : Innecesaria',
+    description: 'Leo Perez: Apreté mal el botón.',
+    time: 'Hace 1 hora',
+    type: 'grupo',
+    group: 'Comunidad San Jose',
+    alertType: 'unnecessary',
+  },
+];
+
+const alertConfig = {
+  sos: {
+    icon: <Siren size={normalize(24)} color="#fff" />,
+    color: styles.sosBar,
+    textColor: styles.sosAlert,
+    buttonColor: styles.sosButton,
+  },
+  '911': {
+    icon: <ShieldAlert size={normalize(24)} color="#fff" />,
+    color: styles.alert911Bar,
+    textColor: styles.alert911,
+    buttonColor: styles.alert911Button,
+  },
+  unnecessary: {
+    icon: <Bell size={normalize(24)} color="#fff" />,
+    color: styles.unnecessaryBar,
+    textColor: styles.unnecessaryAlert,
+    buttonColor: styles.unnecessaryButton,
+  },
+};
 
 // Definimos el componente principal de la pantalla de notificaciones
 const NotificationsScreen: React.FC<NotificationsProps> = ({ navigation }) => {
   // Estado que almacena las notificaciones
-  const [notifications, setNotifications] = useState<Notification[]>([
-    {
-      id: '1',
-      title: 'Alerta : SOS',
-      description: 'Familia: Me caí de la moto.',
-      time: 'Hace 30 minutos',
-      type: 'grupo',
-      group: 'Comunidad San Jose',
-    },
-    {
-      id: '2',
-      title: 'Alerta : 911',
-      description: 'Cercano: Pablo Vargas - Ayuda urgente.',
-      time: 'Hace 40 minutos',
-      type: 'clientes', // Cambiado aquí
-    },
-    {
-      id: '3',
-      title: 'Alerta : Innecesaria',
-      description: 'Leo Perez: Apreté mal el botón.',
-      time: 'Hace 1 hora',
-      type: 'grupo',
-      group: 'Comunidad San Jose',
-    },
-  ]);
-
+  const [notifications, setNotifications] = useState<Notification[]>(initialNotifications);
   // Estado que controla la apertura del menú lateral
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [showMap, setShowMap] = useState(false);
@@ -57,11 +83,11 @@ const NotificationsScreen: React.FC<NotificationsProps> = ({ navigation }) => {
   // Función para confirmar la eliminación de una notificación
   const confirmDelete = (id: string) => {
     Alert.alert(
-      "Confirmar eliminación",
-      "¿Seguro que deseas eliminar esta notificación?",
+      'Confirmar eliminación',
+      '¿Seguro que deseas eliminar esta notificación?',
       [
-        { text: "Cancelar", style: "cancel" }, // Opción para cancelar
-        { text: "Eliminar", onPress: () => handleDelete(id), style: "destructive" }, // Opción para eliminar
+        { text: 'Cancelar', style: 'cancel' }, // Opción para cancelar
+        { text: 'Eliminar', onPress: () => handleDelete(id), style: 'destructive' }, // Opción para eliminar
       ]
     );
   };
@@ -73,63 +99,49 @@ const NotificationsScreen: React.FC<NotificationsProps> = ({ navigation }) => {
 
   // Función que renderiza cada tarjeta de notificación
   const renderNotificationCard = (notification: Notification) => {
-    const translateX = new Animated.Value(0); // Valor de animación para futuros efectos
-
-    // Determina el estilo del título según el tipo de alerta
-    let titleStyle = [styles.notificationTitle];
-    if (notification.id === '1') titleStyle.push(styles.sosAlert); // Estilo para alerta SOS
-    if (notification.id === '2') titleStyle.push(styles.alert911); // Estilo para alerta 911
-    if (notification.id === '3') titleStyle.push(styles.unnecessaryAlert); // Estilo para alerta innecesaria
-
-    // Determina el texto del encabezado según el tipo de notificación
-    let headerText = '';
-    if (notification.type === 'grupo') {
-      headerText = notification.group || 'Comunidad';
-    } else if (notification.type === 'clientes') {
-      headerText = 'Cercano: Pablo Vargas';
-    }
-
+    const config = alertConfig[notification.alertType];
+    const headerText = notification.type === 'grupo' ? notification.group || 'Comunidad' : 'Cercano: Pablo Vargas';
     return (
       <TouchableWithoutFeedback key={notification.id} onLongPress={() => confirmDelete(notification.id)}>
-        <Animated.View style={[styles.notificationCard, { transform: [{ translateX }] }]}>
-          
-          {/* Encabezado de la notificación con nombre de la comunidad y tiempo transcurrido */}
-          <View style={styles.notificationHeader}>
-            <Text style={styles.communityText}>{headerText}</Text>
-            <Text style={styles.timeText}>{notification.time}</Text>
+        <View style={styles.cardContainer}>
+          {/* Barra lateral de color e ícono */}
+          <View style={[styles.sideBar, config.color]}>
+            {config.icon}
           </View>
-
-          {/* Contenido de la notificación con título, descripción y una imagen */}
-          <View style={styles.notificationContent}>
-            <View style={styles.notificationInfo}>
-              <Text style={titleStyle}>{notification.title}</Text>
-              <Text style={styles.notificationDescription}>{notification.description}</Text>
+          {/* Cuerpo de la tarjeta */}
+          <View style={styles.cardContent}>
+            <View style={styles.notificationHeader}>
+              <Text style={styles.communityText}>{headerText}</Text>
+              <Text style={styles.timeText}>{notification.time}</Text>
             </View>
-            <Image source={require('../../assets/noti.jpg')} style={styles.profileImage} />
-          </View>
-
-          {/* Botones de acción en la notificación */}
-          <View style={styles.notificationActions}>
-            {/* Si la notificación NO es innecesaria, muestra el botón para ver la dirección */}
-            {notification.id !== '3' && (
-              <TouchableOpacity
-                style={styles.deleteButton}
-                onPress={() => setShowMap(true)}
-              >
-                <Text style={styles.deleteText}>Ver ubicación</Text>
-                <ArrowRight size={normalize(20)} color="#fff" />
-              </TouchableOpacity>
-            )}
-            {/* Si la notificación es innecesaria, muestra el botón de alerta innecesaria */}
-            {notification.id === '3' && (
-              <View style={styles.innecesarioButton}>
-                <XCircle size={normalize(20)} color="#fff" />
-                <Text style={styles.innecesarioText}>Innecesario</Text>
+            <View style={styles.notificationContentWeb}>
+              <View style={styles.notificationInfo}>
+                <Text style={[styles.notificationTitle, config.textColor]}>{notification.title}</Text>
+                <Text style={styles.notificationDescription}>{notification.description}</Text>
               </View>
-            )}
+              <Image
+                source={require('../../assets/noti.jpg')}
+                style={styles.profileImage}
+              />
+            </View>
+            <View style={styles.notificationActions}>
+              {notification.alertType !== 'unnecessary' ? (
+                <TouchableOpacity
+                  style={[styles.actionButton, config.buttonColor]}
+                  onPress={() => setShowMap(true)}
+                >
+                  <MapPin size={normalize(18)} color="#fff" style={{ marginRight: normalize(6) }} />
+                  <Text style={styles.actionButtonText}>Ver ubicación</Text>
+                </TouchableOpacity>
+              ) : (
+                <View style={[styles.actionButton, styles.innecesarioButton]}>
+                  <XCircle size={normalize(18)} color="#fff" style={{ marginRight: normalize(6) }} />
+                  <Text style={styles.actionButtonText}>Alerta Innecesaria</Text>
+                </View>
+              )}
+            </View>
           </View>
-
-        </Animated.View>
+        </View>
       </TouchableWithoutFeedback>
     );
   };
@@ -140,7 +152,12 @@ const NotificationsScreen: React.FC<NotificationsProps> = ({ navigation }) => {
   };
 
   return (
-    <ImageBackground source={require('../../assets/fondo.png')} style={styles.backgroundImage} resizeMode="cover">
+   <LinearGradient
+  colors={['#1d7a7a', '#0f172a']}
+  style={styles.backgroundImage}
+  start={{ x: 0, y: 1 }}
+  end={{ x: 1, y: 0 }}
+>
       <SafeAreaView style={styles.container}>
         
         {/* Encabezado de la pantalla con botón para abrir el menú lateral */}
@@ -151,7 +168,7 @@ const NotificationsScreen: React.FC<NotificationsProps> = ({ navigation }) => {
           {notifications.length > 0 ? (
             notifications.map(renderNotificationCard) // Renderiza cada tarjeta de notificación
           ) : (
-            <Text>No hay notificaciones</Text> // Mensaje si no hay notificaciones
+            <Text style={{ textAlign: 'center', color: '#888', marginTop: 40 }}>No hay notificaciones</Text> // Mensaje si no hay notificaciones
           )}
         </ScrollView>
 
@@ -183,7 +200,7 @@ const NotificationsScreen: React.FC<NotificationsProps> = ({ navigation }) => {
         </Modal>
 
       </SafeAreaView>
-    </ImageBackground>
+     </LinearGradient>
   );
 };
 

@@ -3,15 +3,17 @@ import { View, Text, Image, TouchableOpacity, ImageBackground } from "react-nati
 import { styles } from "./InformationStyles";
 import Header from "../../components/Header/Header";
 import CustomSidebar from "../../components/Sidebar/Sidebar"; 
+import { LinearGradient } from 'expo-linear-gradient';
 
 const InformationScreen = () => {
   const [isSidebarOpen, setSidebarOpen] = useState<boolean>(false);
 
   return (
-    <ImageBackground 
-      source={require("../../assets/fondo.png")} 
+     <LinearGradient
+      colors={['#1d7a7a', '#0f172a']}
       style={styles.backgroundImage}
-      resizeMode="cover"
+      start={{ x: 0, y: 1 }}
+      end={{ x: 1, y: 0 }}
     >
       <View style={styles.container}>
         <Header onMenuPress={() => setSidebarOpen(true)} customTitle="Informacion" />
@@ -52,7 +54,7 @@ const InformationScreen = () => {
 
         <CustomSidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
       </View>
-    </ImageBackground>
+ </LinearGradient>
   );
 };
 
